@@ -1,0 +1,17 @@
+{
+  "name": "market-trade",
+  "version": "0.0.1",
+  "description": "A Serverless Project and its Serverless Plugin dependencies.",
+  "author": "me",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "serverless-mocha-plugin": "^0.5.13",
+    "serverless-offline": "^2.6.1"
+  }
+}
