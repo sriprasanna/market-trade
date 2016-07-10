@@ -38,6 +38,10 @@ It runs on t2.micro EC2 instance and listens to the AWS SQS Transactions Queue. 
 Upon receiving a transaction through websocket, the transaction is displayed on a table in the reverse chronological order and a [GeoChart] is rendered showing the countries and the corresponding transaction count.
 ![alt Dashboard Architecture](https://raw.githubusercontent.com/sriprasanna/market-trade/master/dashboard.png)
 
+### Limitations
+ - AWS Lamda allows only 100 concurrent tasks and need to contact Amazon to increase the limit.
+ - AWS SQS message size limit is 1024 bytes (1KB). This hard upper limit is configured using CloudFormation and this is not Amazon's default configuration.
+ - Dashboard is running on t2.micro EC2 instance.
 
 [Serverless]: <http://serverless.com/>
 [ExpressJS]: <https://expressjs.com/>
