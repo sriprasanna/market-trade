@@ -19,7 +19,6 @@ const queue = Consumer.create({
   handleMessage: (message, done) => {
     let transaction = JSON.parse(message.Body);
     io.emit('transaction', transaction);
-    console.log(transaction);
     done();
   }
 });
@@ -35,6 +34,6 @@ app.get('/', (req, res) => {
 });
 
 
-http.listen(3000, () => {
+http.listen(process.env.PORT, () => {
   console.log('listening on *:3000');
 });
