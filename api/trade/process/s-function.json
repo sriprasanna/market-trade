@@ -4,7 +4,7 @@
   "description": "Serverless Lambda function for project: market-trade",
   "customName": false,
   "customRole": false,
-  "handler": "api/trade/process/handler.handler",
+  "handler": "trade/process/handler.handler",
   "timeout": 6,
   "memorySize": 1024,
   "authorizer": {},
