@@ -6,9 +6,7 @@ const Promise     = require('bluebird');
 const uuid        = require('node-uuid');
 const moment      = require('moment');
 
-const TableName = 'TradeTransactions';
-const AttributesToGet = [
-                          'id',
+const mandatoryFields = [
                           'userId',
                           'currencyFrom',
                           'currencyTo',
@@ -18,8 +16,14 @@ const AttributesToGet = [
                           'timePlaced',
                           'originatingCountry'
                         ];
+const TableName = 'TradeTransactions';
+const AttributesToGet = mandatoryFields.concat(['id']);
 
 class Dynamo {
+  constructor() {
+    this.mandatoryFields = mandatoryFields;
+  }
+
   createTransaction(transaction) {
     const id = uuid.v4();
     transaction.id = id;
