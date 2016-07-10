@@ -43,3 +43,4 @@ admin.env
 _meta
 
 api/keys
+artillery_report_*.json

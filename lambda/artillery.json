@@ -2,7 +2,7 @@
   "config": {
     "target": "https://dbbtkld6p8.execute-api.us-east-1.amazonaws.com",
     "phases": [
-      {"duration": 60, "arrivalCount": 100}
+      {"duration": 60, "arrivalCount": 600}
     ]
   },
   "scenarios": [

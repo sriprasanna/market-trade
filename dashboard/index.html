@@ -65,17 +65,14 @@
       var template = $("#transaction-row").html(),
         list = $("#transaction-list"),
         options = {},
+        data,
         chart,
-        countryCountMap = {};
+        countryCountMap = {},
+        countriesQueue = [];
 
       var socket = io(window.location.href);
       socket.on('transaction', function (transaction){
-        if (countryCountMap[transaction.originatingCountry]) {
-          countryCountMap[transaction.originatingCountry] += 1;
-        } else {
-          countryCountMap[transaction.originatingCountry] = 1;
-        }
-        drawChart();
+        countriesQueue.push(transaction.originatingCountry);
         transaction.livestamp = (+(new Date(transaction.timePlaced))) / 1000; // Time in unix timestamp
         $.tmpl(template, transaction)
           .prependTo(list);
@@ -84,20 +81,28 @@
       google.charts.load('current', {'packages':['geochart']});
       google.charts.setOnLoadCallback(drawRegionsMap);
 
-      function drawChart() {
-        var dataArray = [
-          ['Country', 'Count']
-        ];
-        for (var country in countryCountMap) {
-          dataArray.push([country, countryCountMap[country]]);
+      function updateChart(country) {
+        if (country) {
+          if (countryCountMap[country]) {
+            countryCountMap[country] += 1;
+          } else {
+            countryCountMap[country] = 1;
+          }
+          data.addRow([country, countryCountMap[country]]);
+          chart.draw(data, options);
         }
-        var data = google.visualization.arrayToDataTable(dataArray);
-        chart.draw(data, options);
       }
+
+      window.setInterval(function() {
+        updateChart(countriesQueue.pop());
+      }, 100);
 
       function drawRegionsMap() {
         chart = new google.visualization.GeoChart($('#geochart')[0])
-        drawChart();
+        data = new google.visualization.DataTable();
+        data.addColumn('string', 'Country');
+        data.addColumn('number', 'Count');
+        chart.draw(data, options);
       }
     });
   </script>
