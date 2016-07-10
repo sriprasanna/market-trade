@@ -18,6 +18,7 @@ const queue = Consumer.create({
   queueUrl: process.env.QUEUE_URL,
   handleMessage: (message, done) => {
     let transaction = JSON.parse(message.Body);
+    io.emit('transaction', transaction);
     console.log(transaction);
     done();
   }
@@ -29,16 +30,10 @@ queue.on('error', (error) => {
 
 queue.start();
 
-
-// listenToQueue();
-
 app.get('/', (req, res) => {
   res.sendfile('index.html');
 });
 
-io.on('connection', socket => {
-  console.log('a user connected');
-});
 
 http.listen(3000, () => {
   console.log('listening on *:3000');
