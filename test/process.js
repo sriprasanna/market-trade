@@ -10,12 +10,12 @@ const chance      = new Chance();
 const _           = require('lodash');
 const dynamo      = require('../api/lib/dynamo');
 const moment      = require('moment');
-
-
-const liveFunction = {
-  region: process.env.SERVERLESS_REGION,
-  lambdaFunction: process.env.SERVERLESS_PROJECT + '-process'
-}
+const AWS         = require('aws-sdk');
+const sqs         = new AWS.SQS({
+  region : process.env.SERVERLESS_REGION,
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_KEY
+});
 
 describe('process', () => {
   before(function () {
@@ -53,6 +53,19 @@ describe('process', () => {
     });
   });
 
+  it('should store a transaction and drop originating country to an SQS', (done) => {
+    let transaction = getTransactionSeed();
+    transaction.broadcast = true;
+    let QueueUrl = process.env.QUEUE_URL;
+    sqs.receiveMessage({QueueUrl}, (error, data) => {
+      _.each(data.messages, (message) => {
+        expect(message).to.equal(transaction);
+      });
+      done();
+    });
+    wrapper.run(transaction, () => {});
+  });
+
   function getTransactionSeed(date) {
     let currencies = chance.currency_pair();
     date = date || getDateString(new Date(chance.hammertime()));
@@ -64,7 +77,8 @@ describe('process', () => {
       'amountBuy': chance.natural(),
       'rate': chance.natural(),
       'timePlaced': date,
-      'originatingCountry': chance.country()
+      'originatingCountry': chance.country(),
+      broadcast: false
     };
     return transaction;
   }
