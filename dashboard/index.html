@@ -40,9 +40,7 @@
     </div>
   </div>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/livestamp/1.1.2/livestamp.min.js"></script>
   <script src="//ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
   <script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
@@ -56,7 +54,7 @@
       <td>${amountSell}</td>
       <td>${amountBuy}</td>
       <td>${originatingCountry}</td>
-      <td data-livestamp="${livestamp}" title="${timePlaced}"></td>
+      <td>${timePlaced}</td>
     </tr>
   </script>
 
@@ -73,7 +71,6 @@
       var socket = io(window.location.href);
       socket.on('transaction', function (transaction){
         countriesQueue.push(transaction.originatingCountry);
-        transaction.livestamp = (+(new Date(transaction.timePlaced))) / 1000; // Time in unix timestamp
         $.tmpl(template, transaction)
           .prependTo(list);
       });
