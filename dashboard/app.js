@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
   res.sendfile('index.html');
 });
 
-
-http.listen(process.env.PORT, () => {
-  console.log('listening on *:3000');
+const port = process.env.PORT;
+http.listen(port, () => {
+  console.log(`listening on *:${port}`);
 });
