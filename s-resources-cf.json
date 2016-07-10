@@ -46,6 +46,13 @@
                 "*"
               ],
               "Resource": "arn:aws:dynamodb:${region}:*:table/TradeTransactions"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "*"
+              ],
+              "Resource": "arn:aws:sqs:${region}:*:TransactionsQueue"
             }
           ]
         },
@@ -77,6 +84,13 @@
             "WriteCapacityUnits": 1
         },
         "TableName": "TradeTransactions"
+      }
+    },
+    "TransactionsQueue": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+         "MaximumMessageSize": 1024,
+         "QueueName": "TransactionsQueue"
       }
     }
   },
