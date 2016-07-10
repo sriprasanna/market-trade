@@ -14,6 +14,11 @@
 
   <div class="container">
     <div class="row">
+      <div class="twelve columns">
+        <div id="geochart"></div>
+      </div>
+    </div>
+    <div class="row">
       <table class="u-full-width">
         <thead>
           <tr>
@@ -40,6 +45,8 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/livestamp/1.1.2/livestamp.min.js"></script>
   <script src="//ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+  <script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
   <script id="transaction-row" type="text/template">
     <tr>
       <td>${userId}</td>
@@ -56,13 +63,42 @@
   <script type="text/javascript">
     $(function (){
       var template = $("#transaction-row").html(),
-        list = $("#transaction-list");
+        list = $("#transaction-list"),
+        options = {},
+        chart,
+        countryCountMap = {};
+
       var socket = io(window.location.href);
       socket.on('transaction', function (transaction){
+        if (countryCountMap[transaction.originatingCountry]) {
+          countryCountMap[transaction.originatingCountry] += 1;
+        } else {
+          countryCountMap[transaction.originatingCountry] = 1;
+        }
+        drawChart();
         transaction.livestamp = (+(new Date(transaction.timePlaced))) / 1000; // Time in unix timestamp
         $.tmpl(template, transaction)
           .prependTo(list);
       });
+
+      google.charts.load('current', {'packages':['geochart']});
+      google.charts.setOnLoadCallback(drawRegionsMap);
+
+      function drawChart() {
+        var dataArray = [
+          ['Country', 'Count']
+        ];
+        for (var country in countryCountMap) {
+          dataArray.push([country, countryCountMap[country]]);
+        }
+        var data = google.visualization.arrayToDataTable(dataArray);
+        chart.draw(data, options);
+      }
+
+      function drawRegionsMap() {
+        chart = new google.visualization.GeoChart($('#geochart')[0])
+        drawChart();
+      }
     });
   </script>
 
