@@ -39,7 +39,7 @@ class Dynamo {
         if (error) {
           reject(error);
         } else {
-          resolve({ id });
+          resolve(transaction);
         }
       });
     });

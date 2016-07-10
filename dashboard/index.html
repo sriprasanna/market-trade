@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Currency Trade Dashboard</title>
+  <meta name="description" content="Currency Trade Dashboard">
+  <meta name="author" content="Sri Prasanna">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="row">
+      <table class="u-full-width">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Currency from</th>
+            <th>Currency to</th>
+            <th>Rate</th>
+            <th>Amount sold</th>
+            <th>Amount bought</th>
+            <th>Originating country</th>
+            <th>Placed at</th>
+          </tr>
+        </thead>
+        <tbody id="transaction-list">
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="//ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js" charset="utf-8"></script>
+  <script id="transaction-row" type="text/template">
+    <tr>
+      <th>${userId}</th>
+      <th>${currencyFrom}</th>
+      <th>${currencyTo}</th>
+      <th>${rate}</th>
+      <th>${amountSell}</th>
+      <th>${amountBuy}</th>
+      <th>${originatingCountry}</th>
+      <th>${timePlaced}</th>
+    </tr>
+  </script>
+
+  <script type="text/javascript">
+    $(function (){
+      var template = $("#transaction-row").html(),
+        list = $("#transaction-list");
+      $.tmpl(template, {userId: 1})
+        .prependTo(list);
+    });
+  </script>
+
+</body>
+</html>

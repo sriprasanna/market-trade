@@ -1,0 +1,45 @@
+"use strict";
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+require('dotenv').config();
+const AWS = require('aws-sdk');
+
+const Consumer = require('sqs-consumer');
+
+AWS.config.update({
+  region: process.env.AWS_REGION,
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_KEY
+});
+
+
+const queue = Consumer.create({
+  queueUrl: process.env.QUEUE_URL,
+  handleMessage: (message, done) => {
+    let transaction = JSON.parse(message.Body);
+    console.log(transaction);
+    done();
+  }
+});
+
+queue.on('error', (error) => {
+  console.log(error.message);
+});
+
+queue.start();
+
+
+// listenToQueue();
+
+app.get('/', (req, res) => {
+  res.sendfile('index.html');
+});
+
+io.on('connection', socket => {
+  console.log('a user connected');
+});
+
+http.listen(3000, () => {
+  console.log('listening on *:3000');
+});
