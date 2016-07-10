@@ -1,5 +1,20 @@
 {
   "name": "market-trade",
-  "custom": {},
-  "plugins": []
+  "custom": {
+    "dynamodb": {
+      "migration": {
+        "dir": "migrations",
+        "table_prefix": "",
+        "table_suffix": ""
+      },
+      "start": {
+        "migration": true
+      }
+    }
+  },
+  "plugins": [
+    "serverless-offline",
+    "serverless-dynamodb-local",
+    "serverless-mocha-plugin"
+  ]
 }
