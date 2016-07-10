@@ -20,9 +20,25 @@ Currency trade transactions are sent to an endpoint in the following format:
   - Dashboard
 
 ### Message Processor
-Message processor is built on top [Serverless] framework. API endpoint is built using AWS API Gateway, which triggers a AWS Lambda function when a HTTP POST request is sent. Lambda function validates and persists the posted transaction, and pushes transaction to an AWS SQS Queue.
+Message processor is built on top [Serverless] framework. API endpoint is built using AWS API Gateway, which triggers a AWS Lambda function when a HTTP POST request is sent. Lambda function validates and persists the posted transaction in DynamoDB, and pushes transaction to an AWS SQS Queue.
 
+**Why DynamoDB?**
+ - Fast and predictable performance
+ - Very easy to scale
+ - Support for easy integration with Elasticsearch, AWS EMR, Apache Spark and etc,.
 
 ![alt Message Processor Architecture](https://raw.githubusercontent.com/sriprasanna/market-trade/master/message-processor.png)
 
+### Dashboard
+Dashboard is built using [ExpressJS].
+#### Server
+It runs on t2.micro EC2 instance and listens to the AWS SQS Transactions Queue. When received a message through the queue, the transaction is pushed to the browser via [Socket.io].
+#### Browser
+Upon receiving a message through websockets, transaction is displayed on a table in the reverse chronological order. Additionally, a [GeoChart] is rendered showing the countries with corresponding transaction count.
+![alt Dashboard Architecture](https://raw.githubusercontent.com/sriprasanna/market-trade/master/dashboard.png)
+
+
 [Serverless]: <http://serverless.com/>
+[ExpressJS]: <https://expressjs.com/>
+[Socket.io]: <http://socket.io/>
+[GeoChart]: <https://developers.google.com/chart/interactive/docs/gallery/geochart#region-geocharts>
