@@ -62,7 +62,10 @@
     $(function (){
       var template = $("#transaction-row").html(),
         list = $("#transaction-list"),
-        options = {},
+        options = {
+          displayMode: 'region',
+          colorAxis: {colors: ['green', 'blue']}
+        },
         data,
         chart,
         countryCountMap = {},
